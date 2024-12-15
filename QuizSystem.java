@@ -1,8 +1,3 @@
-
-
-//ONLINE QUIZ SYSTEM: 
-//SYED IMRAN MURTAZA | MUHAMMAD SHEREYAR
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +9,7 @@ public class QuizSystem {
     private Quiz quiz;
 
     public QuizSystem() {
-        
+    
         quiz = new Quiz();
     }
 
@@ -163,16 +158,132 @@ public class QuizSystem {
         }
     }
 
+    ///////
+
+    public class Quiz {
+        private List<String> questions;
+        private List<String[]> options;
+        private List<Integer> answers;
+
+        public Quiz() {
+            questions = new ArrayList<>();
+            options = new ArrayList<>();
+            answers = new ArrayList<>();
+
+            questions.add("Which programming language is this program written in?");
+            options.add(new String[]{"Java", "Python", "C", "Ruby"});
+            answers.add(1);
+
+            questions.add("What is the capital of France?");
+            options.add(new String[]{"Paris", "London", "New York", "Berlin"});
+            answers.add(1);
+
+            questions.add("Which planet is closest to the Sun?");
+            options.add(new String[]{"Earth", "Mars", "Jupiter", "Mercury"});
+            answers.add(4);
+        }
+
+        public void startQuiz() {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Quiz Starts!");
+            int score = 0;
+
+            for (int i = 0; i < questions.size(); i++) {
+                System.out.println();
+                System.out.println(questions.get(i));
+                String[] questionOptions = options.get(i);
+                for (int j = 0; j < questionOptions.length; j++) {
+                    System.out.println((j + 1) + ". " + questionOptions[j]);
+                }
+
+                int userAnswer = -1;
+                while (userAnswer < 1 || userAnswer > 4) {
+                    System.out.print("Select the correct option (1-4): ");
+                    if (scanner.hasNextInt()) {
+                        userAnswer = scanner.nextInt();
+                        if (userAnswer < 1 || userAnswer > 4) {
+                            System.out.println("Invalid option! Please select a number between 1 and 4.");
+                        }
+                    } else {
+                        System.out.println("Invalid input! Please enter a number between 1 and 4.");
+                        scanner.next();
+                    }
+                }
+
+                if (userAnswer == answers.get(i)) {
+                    score++;
+                }
+            }
+
+            System.out.println("Quiz Ends!");
+            int total = questions.size();
+            System.out.println("\nYour total score is: " + score + "/" + total);
+
+            if (score == total) {
+                System.out.println("The grade is: A");
+            } else if (score >= total / 2) {
+                System.out.println("Your grade is: B");
+            } else {
+                System.out.println("You failed the quiz!");
+            }
+
+            System.out.println();
+            System.out.println("Do you want to start the quiz again? ");
+        }
+
+        public void adminPanel() {
+            Scanner scanner = new Scanner(System.in);
+            boolean flag = true;
+
+            while (flag) {
+                System.out.println();
+                System.out.println("Welcome admin!");
+
+                System.out.print("Enter the question you want to add to the quiz: ");
+                String newQues = scanner.nextLine();
+
+                System.out.print("Enter the options separated by a comma for the question: ");
+                String[] newOptions = scanner.nextLine().split(",");
+
+                int correctIndex = -1;
+                while (correctIndex < 1 || correctIndex > newOptions.length) {
+                    System.out.print("Enter the correct option index of the answer (1 to " + newOptions.length + "): ");
+                    if (scanner.hasNextInt()) {
+                        correctIndex = scanner.nextInt();
+                        scanner.nextLine();
+                        if (correctIndex < 1 || correctIndex > newOptions.length) {
+                            System.out.println("Invalid option! Please select a valid index.");
+                        }
+                    } else {
+                        System.out.println("Invalid input! Please enter a number.");
+                        scanner.next();
+                    }
+                }
+
+                addingQuestion(newQues, newOptions, correctIndex);
+
+                System.out.print("Press 0 to exit or any other number to continue adding questions: ");
+                if (scanner.hasNextInt()) {
+                    int choice = scanner.nextInt();
+                    scanner.nextLine();
+                    if (choice == 0) {
+                        flag = false;
+                    }
+                }
+            }
+        }
+
+        private void addingQuestion(String question, String[] optionsArray, int correctIndex) {
+            questions.add(question);
+            options.add(optionsArray);
+            answers.add(correctIndex);
+            System.out.println("Question added successfully!");
+        }
+    }
 
 
 
-
-/////
-/// 
-/// 
-
-
-
+    ///
 
     public static void main(String[] args) {
         QuizSystem main = new QuizSystem();
